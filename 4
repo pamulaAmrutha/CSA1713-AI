@@ -1,0 +1,64 @@
+from collections import deque
+
+def is_goal(state, target):
+    return target in state
+
+def get_successors(state, max_a, max_b):
+    a, b = state
+    successors = set()
+
+    # Fill either jug
+    successors.add((max_a, b))
+    successors.add((a, max_b))
+
+    # Empty either jug
+    successors.add((0, b))
+    successors.add((a, 0))
+
+    # Pour A → B
+    transfer = min(a, max_b - b)
+    successors.add((a - transfer, b + transfer))
+
+    # Pour B → A
+    transfer = min(b, max_a - a)
+    successors.add((a + transfer, b - transfer))
+
+    return successors
+
+def water_jug_solver(jug_a, jug_b, target):
+    start = (0, 0)
+    visited = set()
+    queue = deque()
+    queue.append((start, [start]))  # (current_state, path)
+
+    while queue:
+        state, path = queue.popleft()
+
+        if is_goal(state, target):
+            return path
+
+        if state in visited:
+            continue
+        visited.add(state)
+
+        for succ in get_successors(state, jug_a, jug_b):
+            if succ not in visited:
+                queue.append((succ, path + [succ]))
+
+    return None
+
+# Example usage
+if __name__ == "__main__":
+    jug_a = 4  # capacity of jug A
+    jug_b = 3  # capacity of jug B
+    target = 2  # target amount to measure
+
+    solution = water_jug_solver(jug_a, jug_b, target)
+
+    if solution:
+        print(f"Steps to measure {target} liters:")
+        for i, (a, b) in enumerate(solution):
+            print(f"Step {i}: Jug A = {a}L, Jug B = {b}L")
+        print(f"\nTotal cost (steps): {len(solution) - 1}")
+    else:
+        print("No solution found.")
