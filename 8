@@ -1,0 +1,31 @@
+def dfs(graph, start):
+    visited = set()              # Set to keep track of visited nodes
+    stack = [start]              # Stack to control the DFS order
+    traversal = []               # List to store DFS traversal result
+
+    while stack:
+        node = stack.pop()
+        if node not in visited:
+            visited.add(node)
+            traversal.append(node)
+            # Add neighbors in reverse order to process them left to right
+            stack.extend(reversed(graph[node]))
+
+    return traversal
+
+# Example graph as an adjacency list
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+
+# Starting node
+start_node = 'A'
+
+# Run DFS and print result
+print("DFS Traversal starting from node", start_node)
+print(dfs(graph, start_node))
