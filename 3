@@ -1,0 +1,29 @@
+import itertools
+import re
+
+def solve_cryptarithmetic(puzzle):
+    words = re.findall(r'[A-Z]+', puzzle.upper())
+    unique_letters = sorted(set(''.join(words)))
+    if len(unique_letters) > 10:
+        print("Too many unique letters (more than 10).")
+        return
+    leading_letters = set(word[0] for word in words)
+    formula = puzzle.upper()
+    for letter in unique_letters:
+        formula = formula.replace(letter, f'{{{letter}}}')
+    for perm in itertools.permutations(range(10), len(unique_letters)):
+        letter_to_digit = dict(zip(unique_letters, perm))
+        if any(letter_to_digit[let] == 0 for let in leading_letters):
+            continue
+        try:
+            expression = formula.format(**letter_to_digit)
+            if eval(expression):
+                print("✅ Solution found:")
+                print(f"  {expression}")
+                print("  Letter Mapping:", letter_to_digit)
+                return
+        except ArithmeticError:
+            continue
+    print("❌ No solution found.")
+puzzle = "SEND + MORE == MONEY"
+solve_cryptarithmetic(puzzle)
