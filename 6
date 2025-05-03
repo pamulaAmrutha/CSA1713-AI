@@ -1,0 +1,34 @@
+def vacuum_cleaner_agent(state):
+    location, status = state
+    cost = 0
+    actions = []
+
+    print(f"Initial State: Vacuum at {location}, Room A is {status['A']}, Room B is {status['B']}")
+
+    if status[location] == 'dirty':
+        actions.append(f"Clean {location}")
+        status[location] = 'clean'
+        cost += 1
+
+    # Move to the other room
+    other = 'B' if location == 'A' else 'A'
+    actions.append(f"Move to {other}")
+    cost += 1
+
+    if status[other] == 'dirty':
+        actions.append(f"Clean {other}")
+        status[other] = 'clean'
+        cost += 1
+
+    print("\nActions Taken:")
+    for a in actions:
+        print("-", a)
+
+    print(f"\nFinal State: Room A is {status['A']}, Room B is {status['B']}")
+    print(f"Total Cost: {cost}")
+
+# Example usage
+if __name__ == "__main__":
+    # Initial state: location of vacuum, and cleanliness of rooms
+    initial_state = ('A', {'A': 'dirty', 'B': 'dirty'})
+    vacuum_cleaner_agent(initial_state)
