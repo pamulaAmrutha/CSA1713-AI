@@ -1,0 +1,25 @@
+% disease(Name, ListOfSymptoms)
+disease(flu, [fever, cough, headache, fatigue]).
+disease(cold, [cough, sneezing, runny_nose]).
+disease(malaria, [fever, chills, sweating, headache]).
+disease(dengue, [fever, headache, rash, joint_pain]).
+
+% check if all symptoms are present in user's symptoms
+has_symptoms([], _).
+has_symptoms([H|T], Symptoms) :-
+    member(H, Symptoms),
+    has_symptoms(T, Symptoms).
+
+% diagnose based on symptoms list
+diagnose(Symptoms, Disease) :-
+    disease(Disease, DiseaseSymptoms),
+    has_symptoms(DiseaseSymptoms, Symptoms).
+
+% Example query helper to print all diagnoses for given symptoms
+diagnose_all(Symptoms) :-
+    findall(Disease, diagnose(Symptoms, Disease), Diseases),
+    ( Diseases = [] ->
+        writeln('No diagnosis found.')
+    ; 
+        format('Possible diagnoses: ~w~n', [Diseases])
+    ).
