@@ -1,0 +1,18 @@
+% Define the tree: family(Name, Gender, [Children])
+family_tree(
+    family(john, male, [           % Grandfather
+        family(michael, male, [   % Father
+            family(david, male, []) % Son
+        ])
+    ])
+).
+
+% Print the tree with indentation
+print_tree(family(Name, Gender, Children), Level) :-
+    tab(Level), write(Name), write(' ('), write(Gender), write(')'), nl,
+    print_children(Children, Level + 4).
+
+print_children([], _).
+print_children([Child | Rest], Level) :-
+    print_tree(Child, Level),
+    print_children(Rest, Level).
