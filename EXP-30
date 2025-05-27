@@ -1,0 +1,15 @@
+% Facts
+sunny.
+warm.
+weekend.
+
+% Rules
+go_beach :- sunny, warm, weekend.
+go_hiking :- sunny, weekend.
+stay_home :- rainy.
+take_umbrella :- rainy.
+
+% Sample queries:
+% ?- go_beach.
+% ?- stay_home.
+% ?- take_umbrella.
