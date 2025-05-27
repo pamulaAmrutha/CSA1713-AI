@@ -1,0 +1,18 @@
+% Define birds
+bird(sparrow).
+bird(pigeon).
+bird(ostrich).
+bird(penguin).
+bird(eagle).
+bird(kiwi).
+bird(parrot).
+
+% Define birds that cannot fly
+cannot_fly(ostrich).
+cannot_fly(penguin).
+cannot_fly(kiwi).
+
+% Rule to check if a bird can fly
+can_fly(Bird) :-
+    bird(Bird),
+    \+ cannot_fly(Bird).
