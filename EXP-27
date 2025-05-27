@@ -1,0 +1,41 @@
+% Edges: edge(Node, Neighbor, Cost)
+edge(a, b, 1).
+edge(a, c, 3).
+edge(b, d, 1).
+edge(c, d, 1).
+edge(d, e, 1).
+edge(c, e, 5).
+
+% Heuristic values: h(Node, EstimatedCostToGoal)
+h(a, 4).
+h(b, 2).
+h(c, 2).
+h(d, 1).
+h(e, 0).
+
+% Entry point: best_first(Start, Goal, Path)
+best_first(Start, Goal, Path) :-
+    h(Start, H),
+    best_first_search([H-(Start, [Start], 0)], Goal, RevPath),
+    reverse(RevPath, Path).
+
+% best_first_search(Frontier, Goal, Path)
+best_first_search(Frontier, Goal, Path) :-
+    % Frontier is a list of H-(Node, PathSoFar, CostSoFar)
+    Frontier = [ _H-(Node, PathSoFar, _Cost) | _],
+    ( Node = Goal ->
+        Path = PathSoFar
+    ; 
+        % Expand neighbors
+        Frontier = [H-(Node, PathSoFar, CostSoFar)|RestFrontier],
+        findall(HNext-(Next, [Next|PathSoFar], NewCost),
+            (edge(Node, Next, StepCost),
+             \+ member(Next, PathSoFar),
+             NewCost is CostSoFar + StepCost,
+             h(Next, Hn),
+             HNext is NewCost + Hn),
+            NextNodes),
+        append(RestFrontier, NextNodes, NewFrontierUnsorted),
+        keysort(NewFrontierUnsorted, NewFrontier),  % sort by HNext
+        best_first_search(NewFrontier, Goal, Path)
+    ).
