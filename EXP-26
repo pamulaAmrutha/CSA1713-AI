@@ -1,0 +1,20 @@
+% Facts: fruit(Name, Color)
+fruit(apple, red).
+fruit(banana, yellow).
+fruit(grape, purple).
+fruit(orange, orange).
+fruit(watermelon, green).
+fruit(guava, green).
+fruit(strawberry, red).
+fruit(lemon, yellow).
+
+% Rule: get color of a fruit
+fruit_color(Fruit, Color) :-
+    fruit(Fruit, Color).
+
+% Rule: find all fruits of a given color using backtracking
+fruits_with_color(Color) :-
+    fruit(Fruit, Color),
+    format('~w is ~w in color.~n', [Fruit, Color]),
+    fail.  % force backtracking to find all solutions
+fruits_with_color(_).  % succeed after backtracking is done
