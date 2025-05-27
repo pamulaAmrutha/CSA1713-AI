@@ -1,0 +1,17 @@
+% Facts: disease and its recommended diet
+diet(diabetes, 'Low sugar, high fiber, whole grains, leafy greens').
+diet(hypertension, 'Low salt, fruits, vegetables, lean proteins').
+diet(obesity, 'Low calorie, high protein, vegetables, fruits').
+diet(anemia, 'Iron-rich foods, spinach, red meat, lentils').
+diet(heart_disease, 'Low fat, omega-3, whole grains, vegetables').
+diet(kidney_disease, 'Low sodium, low potassium, controlled protein').
+
+% Rule: suggest diet for a disease
+suggest_diet(Disease) :-
+    diet(Disease, Diet),
+    format('Recommended diet for ~w: ~w~n', [Disease, Diet]).
+
+% Fallback if disease is unknown
+suggest_diet(Disease) :-
+    \+ diet(Disease, _),
+    format('No specific diet recommendation available for ~w.~n', [Disease]).
