@@ -1,0 +1,42 @@
+% Facts: student(StudentID, StudentName).
+student(s1, alice).
+student(s2, bob).
+student(s3, carol).
+
+% Facts: teacher(TeacherID, TeacherName).
+teacher(t1, mr_smith).
+teacher(t2, ms_jones).
+
+% Facts: subject(SubCode, SubjectName).
+subject(sub101, math).
+subject(sub102, physics).
+subject(sub103, chemistry).
+
+% Facts: teaches(TeacherID, SubCode).
+teaches(t1, sub101).
+teaches(t1, sub103).
+teaches(t2, sub102).
+
+% Facts: enrolled(StudentID, SubCode).
+enrolled(s1, sub101).
+enrolled(s1, sub102).
+enrolled(s2, sub101).
+enrolled(s3, sub103).
+
+% Query: Get teacher of a subject
+teacher_of_subject(TeacherName, SubjectName) :-
+    teacher(TeacherID, TeacherName),
+    subject(SubCode, SubjectName),
+    teaches(TeacherID, SubCode).
+
+% Query: Get subjects a student is enrolled in
+subjects_of_student(StudentName, SubjectName) :-
+    student(StudentID, StudentName),
+    enrolled(StudentID, SubCode),
+    subject(SubCode, SubjectName).
+
+% Query: Get students enrolled in a subject
+students_in_subject(SubjectName, StudentName) :-
+    subject(SubCode, SubjectName),
+    enrolled(StudentID, SubCode),
+    student(StudentID, StudentName).
