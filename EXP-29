@@ -1,0 +1,31 @@
+% Facts: known facts
+fact(sunny).
+fact(warm).
+
+% Rules: rule(Conclusion, [Premise1, Premise2, ...])
+rule(beach, [sunny, warm]).
+rule(sport, [sunny]).
+rule(movie, [rainy]).
+rule(rainy, [cloudy]).
+
+% Forward chaining engine: derive new facts
+forward_chain(NewFacts) :-
+    findall(C, (rule(C, Premises), all_facts(Premises), \+ fact(C)), Conclusions),
+    add_facts(Conclusions, NewFacts).
+
+% Check all premises are facts
+all_facts([]).
+all_facts([H|T]) :- fact(H), all_facts(T).
+
+% Add new facts to the database dynamically
+add_facts([], []).
+add_facts([H|T], [H|NewFacts]) :-
+    assertz(fact(H)), % add fact
+    add_facts(T, NewFacts).
+
+% Run forward chaining until no new facts are added
+run_forward_chain :-
+    forward_chain(NewFacts),
+    ( NewFacts = [] -> true
+    ; run_forward_chain
+    ).
