@@ -1,0 +1,40 @@
+% Initial state:
+% state(MonkeyPosition, MonkeyStatus, BoxPosition, HasBanana)
+
+% Possible actions:
+% - move
+% - push
+% - climb
+% - grab
+
+% Final goal: monkey has the banana
+
+% Action rules
+move(state(X, onfloor, X, HasBanana), state(Y, onfloor, X, HasBanana)) :-
+    X \= Y.
+
+push(state(X, onfloor, X, HasBanana), state(Y, onfloor, Y, HasBanana)) :-
+    X \= Y.
+
+climb(state(X, onfloor, X, HasBanana), state(X, onbox, X, HasBanana)).
+
+grab(state(middle, onbox, middle, no), state(middle, onbox, middle, yes)).
+
+% Plan generation using recursion
+can_get_banana(state(_, _, _, yes)).  % Goal reached
+
+can_get_banana(State1) :-
+    move(State1, State2),
+    can_get_banana(State2).
+
+can_get_banana(State1) :-
+    push(State1, State2),
+    can_get_banana(State2).
+
+can_get_banana(State1) :-
+    climb(State1, State2),
+    can_get_banana(State2).
+
+can_get_banana(State1) :-
+    grab(State1, State2),
+    can_get_banana(State2).
